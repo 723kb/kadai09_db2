@@ -1,4 +1,3 @@
-
 <?php
 require_once('funcs.php');
 
@@ -85,9 +84,9 @@ foreach ($results as $row) {
   echo '</div>';
   echo '<div class="flex justify-center">';
   // 編集ボタン→edit.phpへ遷移
-  echo '<button type="button" onclick="location.href=\'edit.php?id=' . $row['id'] . '\'" class="w-1/4 border border-slate-200 rounded-md bg-[#93CCCA] md:bg-transparent md:hover:bg-[#93CCCA] p-2 m-2"><i class="fas fa-edit"></i></button>';
+  echo '<button type="button" onclick="location.href=\'edit.php?id=' . $row['id'] . '\'" class="w-1/4 border-2 rounded-md border-[#93CCCA] md:border md:border-slate-200  text-[#93CCCA] md:bg-transparent md:text-inherit md:hover:bg-[#93CCCA] p-2 m-2"><i class="fas fa-edit"></i></button>';
   // 削除ボタン→delete.phpへ遷移
-  echo '<button type="button" onclick="location.href=\'delete.php?id=' . $row['id'] . '\'" class="w-1/4 border border-slate-200 rounded-md bg-[#B33030] text-white md:bg-transparent md:text-inherit md:hover:bg-[#B33030] md:hover:text-white p-2 m-2"><i class="fas fa-trash-alt"></i></button>';
+  echo '<button type="button" onclick="location.href=\'delete.php?id=' . $row['id'] . '\'" class="w-1/4 border-2 rounded-md border-[#B33030] md:border md:border-slate-200  text-[#B33030] md:bg-transparent md:text-inherit md:hover:bg-[#B33030] md:hover:text-white p-2 m-2"><i class="fas fa-trash-alt"></i></button>';
   echo '</div>';
   echo '</div>';
 }

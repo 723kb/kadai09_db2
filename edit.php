@@ -4,46 +4,65 @@ require_once('funcs.php');
 // DB接続
 $pdo = db_conn();
 
-// 1.データの取得と表示
 // ユーザーが編集ページにアクセスした時に実行
 // GETでidを取得
-$id = $_GET['id'];
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+
+// idが指定されていない場合のエラーハンドリング
+if ($id === null) {
+  exit('編集対象のIDが指定されていません。'); 
+}
 // 編集したい内容をデータベースから取得
 $stmt = $pdo->prepare('SELECT * FROM kadai09_msg_table WHERE id = :id');
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$row = $stmt->fetch();
 
-// 2.データの更新
+// 編集対象のデータが見つからない場合のエラーハンドリング
+if (!$row) {
+  exit('指定されたIDのデータが見つかりません。'); // または他の適切なエラーメッセージを表示
+}
+
+$error_message = ''; // エラーメッセージ初期化
+
 // POSTリクエスト処理 ユーザーが編集フォームを送信した時に実行
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // POSTデータを取得
-  $id = $_POST['id'];
-  $name = $_POST['name'];
-  $message = $_POST['message'];
-  $picture = null;
-
-  // ファイルアップロード処理
-  $picture = handleFileUpload('picture');
-
-  // 更新SQL作成
-  // 新しい画像がアップされた場合
-  if ($picture !== null) {
-    $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, picture = :picture, updated_at = now() WHERE id = :id');
-    $stmt->bindValue(':picture', $picture, PDO::PARAM_LOB);
-    // 既存の画像のままの場合
-  } else {
-    $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, updated_at = now() WHERE id = :id');
+  if (
+    !isset($_POST['name']) || $_POST['name'] === '' ||
+    !isset($_POST['message']) || $_POST['message'] === ''
+  ) {
+    $error_message = '名前または内容が入力されていません';
+  } elseif (mb_strlen($_POST['message']) > 140) {
+    $error_message = '内容は140文字以内で入力してください';
   }
-  $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-  $stmt->bindValue(':message', $message, PDO::PARAM_STR);
-  $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-  $stmt->execute();
 
-  // リダイレクト
-  redirect('index.php');
+  if (empty($error_message)) {
+    // エラーがなければ更新処理などを実行する
+    // POSTデータを取得
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $message = $_POST['message'];
+    $picture = null;
+
+    // ファイルアップロード処理
+    $picture = handleFileUpload('picture');
+
+    // 更新SQL作成
+    if ($picture !== null) {
+      $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, picture = :picture, updated_at = now() WHERE id = :id');
+      $stmt->bindValue(':picture', $picture, PDO::PARAM_LOB);
+    } else {
+      $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, updated_at = now() WHERE id = :id');
+    }
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':message', $message, PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // リダイレクト
+    redirect('index.php');
+  }
 }
-// var_dump($row);
 ?>
 
 <!-- 以下HTMLの表示 -->
@@ -53,8 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- Main[Start] -->
 <div class="min-h-fit w-5/6 flex flex-col flex-1 items-center bg-[#F1F6F5] rounded-lg">
+      <!-- エラーメッセージ表示 -->
+      <?php if (isset($error_message)) : ?>
+      <div class="error-message mt-auto text-red-500">
+        <?= h($error_message) ?>
+      </div>
+    <?php endif; ?>
   <!-- Form[Start] -->
-  <form method="POST" action="edit.php" enctype="multipart/form-data" class="w-full flex flex-col justify-center items-center m-2">
+  <form method="POST" action="" enctype="multipart/form-data" class="w-full flex flex-col justify-center items-center m-2">
     <input type="hidden" name="id" value="<?= h($row['id']) ?>">
     <div class="w-full flex flex-col justify-center m-2">
       <div class="p-4">
@@ -81,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- else追加→既存画像なしでもimg要素を作成→jsでpreviewを操作できる -->
       </div>
       <div class="w-full mt-4 flex justify-around">
-      <button type="submit" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#93CCCA] md:bg-transparent md:hover:bg-[#93CCCA] p-2 m-2"><i class="fas fa-paper-plane"></i></button>
-      <button type="button" onclick="location.href='index.php'" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#D1D1D1] md:bg-transparent md:hover:bg-[#D1D1D1] p-2 m-2"><i class="fas fa-ban"></i></button>
+        <button type="button" onclick="location.href='index.php'" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#D1D1D1] md:bg-transparent md:hover:bg-[#D1D1D1] p-2 m-2"><i class="fas fa-long-arrow-alt-left"></i></button>
+        <button type="submit" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#93CCCA] md:bg-transparent md:hover:bg-[#93CCCA] p-2 m-2"><i class="fas fa-check-circle"></i></button>
       </div>
     </div>
   </form>

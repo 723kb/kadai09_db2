@@ -1,6 +1,8 @@
 // ボタンをクリックしたときの処理
 document.getElementById('showSearchButton').addEventListener('click', function() {
-  var searchForm = document.getElementById('searchForm');
+  const searchForm = document.getElementById('searchForm');
+  const searchInput = document.getElementById('search');
+
 
   // 検索フォームの表示・非表示を切り替える
   if (searchForm.classList.contains('hidden')) {
@@ -8,6 +10,9 @@ document.getElementById('showSearchButton').addEventListener('click', function()
   } else {
     searchForm.classList.add('hidden');
   }
+
+  // IDがsearchの要素までスクロール
+  searchInput.scrollIntoView({ behavior: 'smooth' });
 });
 
 // 選択した写真をプレビュー表示する関数

@@ -1,4 +1,4 @@
-<?php require_once('funcs.php');?>
+<?php require_once('funcs.php'); ?>
 
 <!-- Main[Start] -->
 <div class="min-h-screen w-5/6 flex flex-col flex-1 items-center bg-[#F1F6F5] rounded-lg">
@@ -25,7 +25,7 @@
         <div class="flex flex-col sm:flex-row justify-center items-center">
           <input type="file" name="picture" id="picture" accept="image/*" onchange="previewFile()" class="w-full h-11 py-2 my-2">
           <!-- accept="image/*" 画像ファイルのみを許可 -->
-          <button type="submit" class="w-1/6 border border-slate-200 rounded-md p-2 my-2 bg-[#93CCCA] md:bg-transparent md:hover:bg-[#93CCCA]"><i class="fas fa-paper-plane"></i></button>
+          <button type="submit" class="w-1/3 sm:w-1/4  border-2 rounded-md border-[#93CCCA] md:border md:border-slate-200 md:bg-transparent md:hover:bg-[#93CCCA] p-2 my-2"><i class="fas fa-paper-plane"></i></button>
         </div>
       </div>
       <div class="flex justify-center">
@@ -36,30 +36,31 @@
   <!-- Posting area[End] -->
 
   <!-- Search area[Start] -->
-  <form method="GET" action="" id="searchForm" class="w-full flex flex-col sm:flex-row justify-around items-center  m-2 hidden">
-    <div class="w-full sm:w-2/3 px-4 py-auto sm:p-4">
-      <label for="search" class="text-sm sm:text-base md:text-lg lg:text-xl">内容検索:</label>
-      <input type="text" name="search" placeholder="キーワードで内容を検索" class="w-full h-11 p-2 border rounded-md" id="search" value="<?= h(isset($_GET['search']) ? $_GET['search'] : '') ?>
-">
-    </div>
-    <div class="w-1/3 flex justify-around items-end pt-1 sm:pt-4">
-    <button type="submit" id="searchButton" class="w-1/3 border border-slate-200 rounded-md bg-[#FAEAB1] md:bg-transparent md:hover:bg-[#FAEAB1] p-2 m-2">
-        <i class="fas fa-search "></i>
-      </button>
-      <button type="button" class="w-1/3 border border-slate-200 rounded-md bg-[#D1D1D1] md:bg-transparent md:hover:bg-[#D1D1D1] p-2 m-2" onclick="clearSearch()"><i class="fas fa-times-circle"></i></button>
-    </div>
-  </form>
+  <form method="GET" action="" id="searchForm" class="w-full flex flex-col sm:flex-row items-center p-4  hidden">
+  <div class="w-full sm:w-3/4  py-auto sm:ml-2">
+    <label for="search" class="text-sm sm:text-base md:text-lg lg:text-xl">内容検索:</label>
+    <input type="text" name="search" placeholder="キーワードで内容を検索" class="w-full h-11 p-2 border rounded-md sm:rounded-r-none" id="search" value="<?= h(isset($_GET['search']) ? $_GET['search'] : '') ?>">
+  </div>
+  <div class="w-1/2 sm:w-1/4 flex justify-around items-end sm:items-stretch mt-2 sm:pt-6 sm:mt-0 sm:mr-2">
+    <button type="submit" id="searchButton" class="w-1/3 sm:w-1/2 border-2 rounded-md border-[#FAEAB1] sm:rounded-none md:border md:border-slate-200 md:bg-transparent md:hover:bg-[#FAEAB1] p-2 m-2 sm:mx-0 md:mt-3 md:py-2">
+      <i class="fas fa-search"></i>
+    </button>
+    <button type="button" class="w-1/3 sm:w-1/2 border-2 rounded-md border-[#D1D1D1] sm:rounded-l-none md:border md:border-slate-200 md:bg-transparent md:hover:bg-[#D1D1D1] p-2 m-2 sm:mx-0 md:mt-3" onclick="clearSearch()">
+      <i class="fas fa-times-circle"></i>
+    </button>
+  </div>
+</form>
   <!-- Search area[End] -->
 
   <!-- Display area[Start] -->
-  <div class="w-full m-4 border-t">
+  <div class="m-4 border-t flex flex-col items-center">
     <h2 class="text-md sm:text-lg md:text-xl lg:text-2xl text-center my-4 font-mochiy-pop-one">Posts</h2>
     <!-- SortButton -->
-    <div class="w-1/2 flex justify-around mx-auto">
-    <button type="button" name="order" id="ascButton" value="asc" class="w-1/5 border border-slate-200 rounded-md bg-[#FFC4C4] md:bg-transparent md:hover:bg-[#FFC4C4] p-2 m-2">
+    <div class="w-1/2 flex justify-around mb-4">
+      <button type="button" name="order" id="ascButton" value="asc" class="w-1/3 sm:w-1/4 border-2 rounded-md border-[#FFC4C4] md:border md:border-slate-200 md:bg-transparent md:hover:bg-[#FFC4C4] p-2 m-2">
         <i class="fas fa-sort-amount-up"></i>
       </button>
-      <button type="button" name="order" id="descButton" value="desc" class="w-1/5 border border-slate-200 rounded-md bg-[#AAC4FF] md:bg-transparent md:hover:bg-[#AAC4FF] p-2 m-2">
+      <button type="button" name="order" id="descButton" value="desc" class="w-1/3 sm:w-1/4 border-2 rounded-md border-[#AAC4FF] md:border md:border-slate-200 md:bg-transparent md:hover:bg-[#AAC4FF] p-2 m-2">
         <i class="fas fa-sort-amount-down"></i>
       </button>
     </div>
