@@ -49,14 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="px-4 min-h-fit w-5/6 flex flex-col flex-1  items-center bg-[#F1F6F5] rounded-lg">
   <div class="w-full max-h-full p-4 m-2 border rounded-md bg-white">
     <h2 class="text-lg font-semibold mb-2">以下の内容を削除しますか？</h2>
-    <p><strong class="text-base sm:text-lg lg:text-xl">名前：</strong><?= htmlspecialchars($row['name']) ?></p>
-    <p class="mt-2"><strong class="text-base sm:text-lg lg:text-xl">内容：</strong><?= nl2br(htmlspecialchars($row['message'])) ?></p>
+    <p><strong class="text-base sm:text-lg lg:text-xl">名前：</strong><?= h($row['name']) ?></p>
+    <p class="mt-2"><strong class="text-base sm:text-lg lg:text-xl">内容：</strong><?= nl2br(h($row['message'])) ?></p>
     <?php if (!empty($row['picture'])) : ?>
       <div class="mt-2">
-        <img src="data:image/jpeg;base64,<?= base64_encode($row['picture']) ?>" alt="写真" class="max-w-full h-auto">
+        <img src="data:image/jpeg;base64,<?= base64_encode($row['picture']) ?>" alt="写真" class="w-full max-w-full max-h-[90vh] object-contain">
       </div>
     <?php endif; ?>
-    <p class="mt-2"><strong class="text-base sm:text-lg lg:text-xl">投稿：</strong><?= htmlspecialchars($row['date']) ?></p>
+    <p class="mt-2"><strong class="text-base sm:text-lg lg:text-xl">投稿：</strong><?= h($row['date']) ?></p>
   </div>
   <!-- Form[Start] -->
   <form action="" method="POST" class="w-full my-4 flex justify-around">
