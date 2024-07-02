@@ -18,7 +18,7 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon-180x180.png" sizes="180x180">
 </head>
 
-<body class="bg-[#B5D9DB] flex flex-col justify-center items-center font-m-plus-1">
+<body class="min-h-screen bg-[#B5D9DB] flex flex-col justify-center items-center font-m-plus-1">
 
   <!-- Header[Start] -->
   <header class="w-screen h-20 sm:h-24 md:h-28 bg-[#B5D9DB] flex justify-center items-center">

@@ -1,8 +1,10 @@
 function previewFile() {
   const fileInput = document.getElementById('picture');
   const preview = document.getElementById('preview');
+
   // 選択されたファイルを取得
   const file = fileInput.files[0];
+
   // FileReaderを使用して内容を読み込み
   if (file) {
     const reader = new FileReader();
@@ -14,11 +16,10 @@ function previewFile() {
 
     reader.readAsDataURL(file);
   } else {
-    // ファイルが選択されていない場合、既存の画像を維持
-    if (preview.src === '') {
-      preview.classList.add('hidden'); // 既存の画像もない場合は隠す
-    }
-  }
+// ファイルが選択されていない場合、プレビューを隠す
+preview.src = ''; // プレビュー画像を空にする
+preview.classList.add('hidden'); // プレビューを隠す
+}
 }
 
 // ページ読み込み時に初期化するために呼び出し
@@ -26,8 +27,10 @@ window.addEventListener('load', initialize);
 
 function initialize() {
   const preview = document.getElementById('preview');
-  if (preview.src !== '') {
-    preview.classList.remove('hidden');
+  if (preview.src !== '' && !preview.classList.contains('hidden')) {
+    preview.classList.remove('hidden'); // プレビューを表示する
+  } else {
+    preview.classList.add('hidden'); // プレビューを隠す
   }
 }
 

@@ -1,3 +1,15 @@
+// ボタンをクリックしたときの処理
+document.getElementById('showSearchButton').addEventListener('click', function() {
+  var searchForm = document.getElementById('searchForm');
+
+  // 検索フォームの表示・非表示を切り替える
+  if (searchForm.classList.contains('hidden')) {
+    searchForm.classList.remove('hidden');
+  } else {
+    searchForm.classList.add('hidden');
+  }
+});
+
 // 選択した写真をプレビュー表示する関数
 function previewFile() {
   const fileInput = document.getElementById('picture');
@@ -19,6 +31,7 @@ function previewFile() {
     preview.classList.add('hidden'); // ファイルがない場合はプレビューを隠す
   }
 }
+
 // ページ読み込み時に初期化するために呼び出し
 previewFile();
 
@@ -108,6 +121,13 @@ window.addEventListener('load', function () {
   if (scrollPosition) {
     window.scrollTo(0, parseInt(scrollPosition)); // スクロール位置を設定
   }
+
+    // 検索フォームの表示状態を設定する
+    const searchForm = document.getElementById('searchForm');
+    const searchValue = urlParams.get('search');
+    if (searchValue) {
+      searchForm.classList.remove('hidden'); // 検索値がある場合は表示
+    }
 });
 
 // モーダル表示のトリガー要素に対するクリックイベントを監視

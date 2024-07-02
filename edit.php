@@ -4,14 +4,17 @@ require_once('funcs.php');
 // DB接続
 $pdo = db_conn();
 
-// GETリクエスト処理 編集したい内容をデータベースから取得
+// 1.データの取得と表示
 // ユーザーが編集ページにアクセスした時に実行
+// GETでidを取得
 $id = $_GET['id'];
+// 編集したい内容をデータベースから取得
 $stmt = $pdo->prepare('SELECT * FROM kadai09_msg_table WHERE id = :id');
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// 2.データの更新
 // POSTリクエスト処理 ユーザーが編集フォームを送信した時に実行
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // POSTデータを取得
@@ -23,12 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // ファイルアップロード処理
   $picture = handleFileUpload('picture');
 
-  // データベースを更新
+  // 更新SQL作成
+  // 新しい画像がアップされた場合
   if ($picture !== null) {
-    $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, picture = :picture WHERE id = :id');
+    $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, picture = :picture, updated_at = now() WHERE id = :id');
     $stmt->bindValue(':picture', $picture, PDO::PARAM_LOB);
+    // 既存の画像のままの場合
   } else {
-    $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message WHERE id = :id');
+    $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, updated_at = now() WHERE id = :id');
   }
   $stmt->bindValue(':name', $name, PDO::PARAM_STR);
   $stmt->bindValue(':message', $message, PDO::PARAM_STR);
@@ -41,11 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // var_dump($row);
 ?>
 
+<!-- 以下HTMLの表示 -->
+
+<!-- header -->
 <?php include 'head.php'; ?>
 
-<!-- edit.php MainArea -->
-<!--  post.phpからほぼコピペ -->
-<div class="min-h-screen w-5/6 flex flex-col items-center bg-[#F1F6F5] rounded-lg">
+<!-- Main[Start] -->
+<div class="min-h-fit w-5/6 flex flex-col flex-1 items-center bg-[#F1F6F5] rounded-lg">
+  <!-- Form[Start] -->
   <form method="POST" action="edit.php" enctype="multipart/form-data" class="w-full flex flex-col justify-center items-center m-2">
     <input type="hidden" name="id" value="<?= h($row['id']) ?>">
     <div class="w-full flex flex-col justify-center m-2">
@@ -72,15 +80,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
         <!-- else追加→既存画像なしでもimg要素を作成→jsでpreviewを操作できる -->
       </div>
-      <div class="flex justify-center">
-        <button type="submit" class="w-1/6 border border-slate-200 hover:bg-[#93CCCA] rounded-md p-2 my-2"><i class="fas fa-paper-plane"></i></button>
+      <div class="w-full mt-4 flex justify-around">
+      <button type="submit" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#93CCCA] md:bg-transparent md:hover:bg-[#93CCCA] p-2 m-2"><i class="fas fa-paper-plane"></i></button>
+      <button type="button" onclick="location.href='index.php'" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#D1D1D1] md:bg-transparent md:hover:bg-[#D1D1D1] p-2 m-2"><i class="fas fa-ban"></i></button>
       </div>
     </div>
   </form>
+  <!-- Form[End] -->
 </div>
+<!-- Main[End] -->
 </body>
 
 <!-- edit.php用のjsファイルを読み込み -->
 <script src="js/edit.js"></script>
 
+<!-- footer -->
 <?php include 'foot.php'; ?>
