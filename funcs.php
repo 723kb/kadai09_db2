@@ -6,12 +6,7 @@ function h($str)
   return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-// $host = "";
-// $dbName = "";
-// $user = "";
-// $password = "";
-// $dsn = "mysql:host={$host};dbname={$dbName};charser=utf8";
-
+// データベース接続関数
 function db_conn()
 {
     try {
@@ -25,4 +20,21 @@ function db_conn()
     } catch (PDOException $e) {
         exit('DB Connection Error:' . $e->getMessage());
     }
+}
+
+//リダイレクト関数: redirect($file_name)
+function redirect($file_name)
+{
+    header('Location: ' . $file_name );
+    exit();
+}
+
+// ファイルアップロード関数
+function handleFileUpload($fileFieldName) {
+  if (isset($_FILES[$fileFieldName]) && $_FILES[$fileFieldName]['error'] === UPLOAD_ERR_OK) {
+      return file_get_contents($_FILES[$fileFieldName]['tmp_name']);
+  } elseif ($_FILES[$fileFieldName]['error'] !== UPLOAD_ERR_NO_FILE) {
+      exit('写真のアップロードに失敗しました');
+  }
+  return null;
 }

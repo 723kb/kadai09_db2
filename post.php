@@ -29,16 +29,16 @@
   <!-- Posting area[End] -->
 
   <!-- Search area[Start] -->
-  <form method="GET" action="" class="w-full flex flex-row justify-around items-center border m-2">
-    <div class="w-2/3 p-4">
+  <form method="GET" action="" class="w-full flex flex-col sm:flex-row justify-around items-center border m-2">
+    <div class="w-full sm:w-2/3 px-4 py-auto sm:p-4">
       <label for="search" class="text-sm sm:text-base md:text-lg lg:text-xl">内容検索:</label>
       <input type="text" name="search" placeholder="キーワードで内容を検索" class="w-full h-11 p-2 border rounded-md" id="search" value="<?= htmlspecialchars(isset($_GET['search']) ? $_GET['search'] : '', ENT_QUOTES) ?>">
     </div>
-    <div class="w-1/3 flex justify-around items-end pt-4">
-      <button type="submit" id="searchButton" class="w-1/4 border border-slate-200 rounded-md hover:bg-[#FAEAB1] p-2 m-2">
+    <div class="w-1/3 flex justify-around items-end pt-1 sm:pt-4">
+      <button type="submit" id="searchButton" class="w-1/3 border border-slate-200 rounded-md hover:bg-[#FAEAB1] p-2 m-2">
         <i class="fas fa-search "></i>
       </button>
-      <button type="button" class="w-1/4 border border-slate-200 rounded-md hover:bg-[#D1D1D1] p-2 m-2" onclick="clearSearch()"><i class="fas fa-times-circle"></i></button>
+      <button type="button" class="w-1/3 border border-slate-200 rounded-md hover:bg-[#D1D1D1] p-2 m-2" onclick="clearSearch()"><i class="fas fa-times-circle"></i></button>
     </div>
   </form>
   <!-- Search area[End] -->
@@ -82,14 +82,8 @@
         $picture = null;  // $pictureの初期化
 
         // ファイルアップロード処理
-        // issetで$_FILESにpictureのファイルが送信されたか確認
-        // $_FILES['picture']['error']はエラーコードを示す変数 UPLOAD_ERR_OKはphpの定数
-        if (isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
-          // $_FILES['picture']['tmp_name'] 一時的なファイルパス 内容を読み込み→代入
-          $picture = file_get_contents($_FILES['picture']['tmp_name']);
-        } elseif ($_FILES['picture']['error'] !== UPLOAD_ERR_NO_FILE) {
-          exit('写真のアップロードに失敗しました');
-        }
+        $picture = handleFileUpload('picture');
+
         // データベースに保存
         $stmt = $pdo->prepare('INSERT INTO kadai09_msg_table(id, name, message, picture, date) VALUES(NULL, :name, :message, :picture, now())');
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
@@ -141,8 +135,12 @@
         }
         echo '</div>';
         echo '<p class="mt-auto text-sm sm:text-base lg:text-lg"><strong class="text-base sm:text-lg lg:text-xl">日付：</strong>' . h($row['date']) . '</p>';
-        echo '<button type="button" onclick="location.href=\'edit.php?id=' . $row['id'] . '\'" class="w-1/4 border border-slate-200 rounded-md hover:bg-[#D1D1D1] p-2 m-2">編集</button>';
-        echo '<button type="button" onclick="location.href=\'delete.php?id=' . $row['id'] . '\'" class="w-1/4 border border-slate-200 rounded-md hover:bg-[#D1D1D1] p-2 m-2">削除</button>';
+        echo '<div class="flex justify-center">';
+        // 編集ボタン
+        echo '<button type="button" onclick="location.href=\'edit.php?id=' . $row['id'] . '\'" class="w-1/4 border border-slate-200 rounded-md hover:bg-[#CEE5D0] p-2 m-2"><i class="fas fa-edit"></i></button>';
+        // 削除ボタン
+        echo '<button type="button" onclick="location.href=\'delete.php?id=' . $row['id'] . '\'" class="w-1/4 border border-slate-200 rounded-md hover:bg-[#B33030] hover:text-white p-2 m-2"><i class="fas fa-trash-alt"></i></button>';
+        echo '</div>';
         echo '</div>';
       
       }

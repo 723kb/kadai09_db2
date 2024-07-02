@@ -3,9 +3,5 @@
       <h1 class="text-center font-mochiy-pop-one text-sm sm:text-base md:text-lg lg:text-xl">2024©なっちゃん</h1>
     </footer>
     <!-- Footer[End] -->
-
-
-    <script src="js/app.js"></script>
     </body>
-
     </html>
