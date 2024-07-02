@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p class="mt-2"><strong class="text-base sm:text-lg lg:text-xl">投稿：</strong><?= htmlspecialchars($row['date']) ?></p>
   </div>
   <!-- Form[Start] -->
-  <form action="" method="POST" class="w-full mt-4 flex justify-around">
+  <form action="" method="POST" class="w-full my-4 flex justify-around">
     <input type="hidden" name="id" value="<?= $id ?>">
     <button type="button" onclick="location.href='index.php'" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#D1D1D1] md:bg-transparent md:hover:bg-[#D1D1D1] p-2 m-2"><i class="fas fa-long-arrow-alt-left"></i></button>
     <button type="submit" class="w-1/4 border border-slate-200 rounded-md py-3 px-6 bg-[#B33030] text-white md:bg-transparent md:text-inherit md:hover:bg-[#B33030] md:hover:text-white p-2 m-2"><i class="fas fa-trash-alt"></i></button>
