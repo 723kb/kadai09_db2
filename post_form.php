@@ -65,5 +65,5 @@
       </button>
     </div>
     <!-- Posts[start] -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
       <!-- 以下に投稿内容が表示される -->
