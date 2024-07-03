@@ -28,6 +28,7 @@
           <button type="submit" class="w-1/3 sm:w-1/4  border-2 rounded-md border-[#93CCCA] md:border md:border-slate-200 md:bg-transparent md:hover:bg-[#93CCCA] p-2 my-2"><i class="fas fa-paper-plane"></i></button>
         </div>
       </div>
+      <!-- Photo Preview Area -->
       <div class="flex justify-center">
         <img src="" id="preview" class="hidden max-w-100% max-h-[300px]" alt="選択した画像のプレビュー">
       </div>

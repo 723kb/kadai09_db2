@@ -1,5 +1,6 @@
 <?php
 require_once('funcs.php');
+require_once('db_conn.php');
 
 // DB接続
 $pdo = db_conn();
@@ -10,7 +11,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 // idが指定されていない場合のエラーハンドリング
 if ($id === null) {
-  exit('編集対象のIDが指定されていません。'); 
+  exit('編集対象のIDが指定されていません。');
 }
 // 編集したい内容をデータベースから取得
 $stmt = $pdo->prepare('SELECT * FROM kadai09_msg_table WHERE id = :id');
@@ -36,24 +37,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $error_message = '内容は140文字以内で入力してください';
   }
 
+  // エラーがなければ更新処理などを実行する
   if (empty($error_message)) {
-    // エラーがなければ更新処理などを実行する
     // POSTデータを取得
     $id = $_POST['id'];
     $name = $_POST['name'];
     $message = $_POST['message'];
-    $picture = null;
+    $picture = null;  // デフォルト値 条件分岐で画像の更新があるか対応
 
     // ファイルアップロード処理
     $picture = handleFileUpload('picture');
 
     // 更新SQL作成
-    if ($picture !== null) {
+    if ($picture !== null) {  // 画像が新たにアップされた場合 名前、メッセージ、画像、更新日時を更新
       $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, picture = :picture, updated_at = now() WHERE id = :id');
       $stmt->bindValue(':picture', $picture, PDO::PARAM_LOB);
-    } else {
+    } else {  // 画像がアップされなかった場合 名前、メッセージ、更新日時を更新 既存の画像を保持
       $stmt = $pdo->prepare('UPDATE kadai09_msg_table SET name = :name, message = :message, updated_at = now() WHERE id = :id');
-    }
+    }  // 共通の処理
     $stmt->bindValue(':name', $name, PDO::PARAM_STR);
     $stmt->bindValue(':message', $message, PDO::PARAM_STR);
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -72,12 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- Main[Start] -->
 <div class="min-h-fit w-5/6 flex flex-col flex-1 items-center bg-[#F1F6F5] rounded-lg">
-      <!-- エラーメッセージ表示 -->
-      <?php if (isset($error_message)) : ?>
-      <div class="error-message mt-auto text-red-500">
-        <?= h($error_message) ?>
-      </div>
-    <?php endif; ?>
   <!-- Form[Start] -->
   <form method="POST" action="" enctype="multipart/form-data" class="w-full flex flex-col justify-center items-center m-2">
     <input type="hidden" name="id" value="<?= h($row['id']) ?>">
@@ -89,7 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="p-4">
         <label for="message" class="text-sm sm:text-base md:text-lg lg:text-xl">内容：</label>
         <textArea name="message" id="message" rows="4" cols="40" class="w-full p-2 border rounded-md"><?= h($row['message']) ?></textArea>
-        <div id="messageError" class="text-red-500 text-lg mt-1 hidden">内容は140文字以内で入力してください</div>
+        <div id="messageError" class="text-red-500 mt-1 hidden">内容は140文字以内で入力してください</div>
+        <!-- エラーメッセージ表示 -->
+        <?php if (isset($error_message)) : ?>
+          <div class="error-message mt-auto text-red-500">
+            <?= h($error_message) ?>
+          </div>
+        <?php endif; ?>
       </div>
       <div class="pb-4 px-4">
         <label for="picture" class="text-sm sm:text-base md:text-lg lg:text-xl">写真：</label>
@@ -98,9 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
       </div>
       <div class="flex justify-center">
-        <?php if (!empty($row['picture'])) : ?>
+        <?php if (!empty($row['picture'])) : ?>  <!-- データに画像があればエンコードしたものを表示 -->
           <img src="data:image/jpeg;base64,<?= base64_encode($row['picture']) ?>" alt="写真" id="preview" class="max-w-100% max-h-[300px]">
-        <?php else : ?>
+        <?php else : ?>  <!-- データに画像がなければ空のsrcを持つimg要素を作成 -->
           <img src="" id="preview" class="hidden max-w-100% max-h-[300px]" alt="選択した画像のプレビュー">
         <?php endif; ?>
         <!-- else追加→既存画像なしでもimg要素を作成→jsでpreviewを操作できる -->
