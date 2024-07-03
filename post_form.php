@@ -53,7 +53,7 @@
   <!-- Search area[End] -->
 
   <!-- Display area[Start] -->
-  <div class="m-4 border-t flex flex-col items-center">
+  <div class="w-full m-4 border-t flex flex-col items-center">
     <h2 class="text-md sm:text-lg md:text-xl lg:text-2xl text-center my-4 font-mochiy-pop-one">Posts</h2>
     <!-- SortButton -->
     <div class="w-1/2 flex justify-around mb-4">
