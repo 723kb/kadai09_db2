@@ -8,7 +8,7 @@ kadai09_db2
 
 ## ③DEMO
 
-https://723kb.jp/kadai09_db2/
+https://723kb.sakura.ne.jp/kadai09_db2/
 
 ## ④作ったアプリケーション用のIDまたはPasswordがある場合
 
